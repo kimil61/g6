@@ -184,7 +184,15 @@ async def write_form_add(
     else:
         service.validate_write_level()
 
-    # TODO: 포인트 검증
+    # 포인트 검증
+    required_point = (
+        board.bo_comment_point if parent_write else board.bo_write_point
+    )
+    service.point_service.validate_enough_point(
+        service.member.mb_id,
+        required_point,
+        "답변 작성" if parent_write else "게시글 작성",
+    )
 
     # 게시판 제목 설정
     board.subject = service.subject
