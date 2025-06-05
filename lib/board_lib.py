@@ -6,7 +6,6 @@ from datetime import datetime, timedelta
 import bleach
 from typing import List
 from fastapi import Request
-from fastapi.templating import Jinja2Templates
 from sqlalchemy import and_, asc, desc, func, insert, or_, select
 from sqlalchemy.sql.expression import Select
 from sqlalchemy.orm import Session
@@ -674,8 +673,7 @@ def send_write_mail(request: Request, board: Board, write: WriteBaseModel, origi
     """
     with DBConnect().sessionLocal() as db:
         config = request.state.config
-        templates = Jinja2Templates(
-                directory=TemplateService.get_templates_dir())
+        templates = TemplateService.get_templates()
 
         def _add_admin_email(admin_id: str):
             admin = db.scalar(select(Member).filter_by(mb_id=admin_id))
